@@ -1,0 +1,65 @@
+name: Update Plugin Version
+
+on:
+  schedule:
+    - cron: 0 4 * * *
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup PHP Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          tools: composer
+
+      - name: Set current date env
+        run: echo "CURRENT_DATE=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+
+      - name: Get version of aws/aws-sdk-php
+        run: echo "AWS_SDK_VERSION_BEFORE=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
+
+      - name: Update dependencies and plugin versions
+        run: |
+          composer install
+          composer update
+          sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" fraise-plugin-aws.php
+
+      - name: Get version of aws/aws-sdk-php
+        run: echo "AWS_SDK_VERSION_AFTER=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
+
+      - name: Compare versions
+        run: |
+          if [[ "${{ env.AWS_SDK_VERSION_BEFORE }}" == "${{ env.AWS_SDK_VERSION_AFTER }}" ]]; then
+            echo "::error::Version of aws/aws-sdk-php has not changed, aborting."
+            exit 1
+          fi
+
+      - name: Commit and push
+        uses: actions-js/push@v1.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "feat: update of plugin version"
+
+      - name: Generate Changelog
+        run: |
+          echo "### 变更日志" >> ${{ github.workspace }}-CHANGELOG.txt
+          echo "- 🚀 升级依赖包 \`aws/aws-sdk-php\` 的版本到 \`${{ env.AWS_SDK_VERSION_AFTER }}\`" >> ${{ github.workspace }}-CHANGELOG.txt
+          echo "- ✨ 升级插件版本到 \`${{ env.CURRENT_DATE }}\`" >> ${{ github.workspace }}-CHANGELOG.txt
+
+      - name: Create zip file
+        run: zip -rq fraise-plugin-aws.zip ./ -x "README*" ".gitignore" ".github/*" ".git/*"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v0.1.15
+        with:
+          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          name: ${{ env.CURRENT_DATE }}
+          tag_name: ${{ env.CURRENT_DATE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: fraise-plugin-aws.zip
