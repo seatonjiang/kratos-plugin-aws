@@ -72,10 +72,6 @@ jobs:
         uses: actions-js/push@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          author_email: "41898282+github-actions[bot]@users.noreply.github.com"
-          author_name: "github-actions[bot]"
-          coauthor_email: "hi@seatonjiang.com"
-          coauthor_name: "Seaton Jiang"
           message: "feat: update of plugin version"
 
       - name: "生成变更日志"
