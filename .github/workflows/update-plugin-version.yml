@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: "拉取代码"
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: "配置 PHP 环境"
         uses: shivammathur/setup-php@v2
@@ -36,10 +38,19 @@ jobs:
       - name: "获取更新后 aws/aws-sdk-php 包的版本"
         run: echo "AWS_SDK_VERSION_AFTER=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
 
+      - name: "检查是否首次发布"
+        run: |
+          if [ -z "$(git tag -l | head -n 1)" ]; then
+            echo "FIRST_RELEASE=true" >> $GITHUB_ENV
+            echo "检测到无历史标签，视为首次发布。"
+          else
+            echo "FIRST_RELEASE=false" >> $GITHUB_ENV
+          fi
+
       - name: "判断是否需要发版"
         id: check_change
         run: |
-          if [ "$AWS_SDK_VERSION_BEFORE" = "$AWS_SDK_VERSION_AFTER" ]; then
+          if [ "$AWS_SDK_VERSION_BEFORE" = "$AWS_SDK_VERSION_AFTER" ] && [ "$FIRST_RELEASE" != "true" ]; then
             echo "SHOULD_RELEASE=false" >> $GITHUB_ENV
             echo "AWS SDK 版本未变化，跳过发布。"
           else
