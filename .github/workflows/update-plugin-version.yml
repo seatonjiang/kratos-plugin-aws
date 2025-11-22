@@ -20,31 +20,43 @@ jobs:
           tools: composer
 
       - name: "设置当前日期环境变量"
+        run: echo "CURRENT_DATE=$(TZ=Asia/Shanghai date +'%Y.%m.%d')" >> $GITHUB_ENV
+
+      - name: "安装依赖"
         run: |
-          set -eo pipefail
+          composer install --no-dev --prefer-dist --no-progress --no-interaction
 
-          # 获取当前北京时间
-          echo "CURRENT_DATE=$(TZ=Asia/Shanghai date +'%Y.%m.%d')" >> $GITHUB_ENV
+      - name: "获取更新前 aws/aws-sdk-php 包的版本"
+        run: echo "AWS_SDK_VERSION_BEFORE=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
 
-          # 获取当前 aws/aws-sdk-php 包的版本
-          echo "AWS_SDK_VERSION_BEFORE=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
+      - name: "安装并更新依赖"
+        run: |
+          composer update aws/aws-sdk-php --no-dev --prefer-dist --no-progress --no-interaction
 
-          # 更新依赖包
-          composer update --no-dev --prefer-dist --no-progress --no-interaction
+      - name: "获取更新后 aws/aws-sdk-php 包的版本"
+        run: echo "AWS_SDK_VERSION_AFTER=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
 
-          # 更新插件版本号
-          sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
-
-          # 获取更新后的 aws/aws-sdk-php 包的版本
-          echo "AWS_SDK_VERSION_AFTER=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
-
-          # 比较 aws/aws-sdk-php 包的版本是否改变
-          if [[ "${{ env.AWS_SDK_VERSION_BEFORE }}" == "${{ env.AWS_SDK_VERSION_AFTER }}" ]]; then
-            echo "aws/aws-sdk-php 包的版本未改变，终止操作。"
-            exit 1
+      - name: "判断是否需要发版"
+        id: check_change
+        run: |
+          if [ "$AWS_SDK_VERSION_BEFORE" = "$AWS_SDK_VERSION_AFTER" ]; then
+            echo "SHOULD_RELEASE=false" >> $GITHUB_ENV
+            echo "AWS SDK 版本未变化，跳过发布。"
+          else
+            echo "SHOULD_RELEASE=true" >> $GITHUB_ENV
+            echo "检测到 AWS SDK 版本变化：$AWS_SDK_VERSION_BEFORE -> $AWS_SDK_VERSION_AFTER"
           fi
 
+      - name: "更新插件版本号"
+        if: env.SHOULD_RELEASE == 'true'
+        run: sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
+
+      - name: "设置发布用的依赖版本"
+        if: env.SHOULD_RELEASE == 'true'
+        run: echo "AWS_SDK_VERSION=${AWS_SDK_VERSION_AFTER}" >> $GITHUB_ENV
+
       - name: "提交并推送变更"
+        if: env.SHOULD_RELEASE == 'true'
         uses: actions-js/push@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -55,12 +67,14 @@ jobs:
           message: "feat: update of plugin version"
 
       - name: "生成变更日志"
+        if: env.SHOULD_RELEASE == 'true'
         run: |
           echo "### 变更日志" >> ${{ github.workspace }}-CHANGELOG.txt
           echo "- 🚀 升级依赖包 \`aws/aws-sdk-php\` 的版本到 \`${{ env.AWS_SDK_VERSION_AFTER }}\`" >> ${{ github.workspace }}-CHANGELOG.txt
           echo "- ✨ 升级插件版本到 \`${{ env.CURRENT_DATE }}\`" >> ${{ github.workspace }}-CHANGELOG.txt
 
       - name: "准备发布文件"
+        if: env.SHOULD_RELEASE == 'true'
         run: |
           rm -rf dist
           mkdir -p dist
@@ -69,9 +83,11 @@ jobs:
           rsync -a vendor/ dist/vendor/ --exclude 'bin/*' --delete
 
       - name: "创建 zip 文件"
+        if: env.SHOULD_RELEASE == 'true'
         run: cd dist && zip -rq ../${{ env.CURRENT_DATE }}.zip . -x ".*" "*.zip"
 
       - name: "创建 Release"
+        if: env.SHOULD_RELEASE == 'true'
         uses: softprops/action-gh-release@v2
         with:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
