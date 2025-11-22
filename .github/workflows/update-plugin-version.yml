@@ -49,7 +49,8 @@ jobs:
 
       - name: "更新插件版本号"
         if: env.SHOULD_RELEASE == 'true'
-        run: sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
+        run: |
+          sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
 
       - name: "设置发布用的依赖版本"
         if: env.SHOULD_RELEASE == 'true'
