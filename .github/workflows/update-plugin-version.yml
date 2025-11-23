@@ -28,7 +28,10 @@ jobs:
         run: echo "AWS_SDK_VERSION_BEFORE=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
 
       - name: "更新依赖"
-        run: composer update aws/aws-sdk-php --no-dev --prefer-dist --no-progress --no-interaction
+        run: |
+          composer install
+          composer update
+          sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
 
       - name: "获取更新后依赖版本"
         run: echo "AWS_SDK_VERSION_AFTER=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
@@ -43,11 +46,6 @@ jobs:
             echo "SHOULD_RELEASE=true" >> $GITHUB_ENV
             echo "检测到版本变化：$AWS_SDK_VERSION_BEFORE -> $AWS_SDK_VERSION_AFTER"
           fi
-
-      - name: "更新插件版本号"
-        if: env.SHOULD_RELEASE == 'true'
-        run: |
-          sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
 
       - name: "提交并推送变更"
         if: env.SHOULD_RELEASE == 'true'
