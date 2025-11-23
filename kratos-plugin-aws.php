@@ -20,3 +20,12 @@ if (!has_action('kratos-plugin-aws')) {
         require_once plugin_dir_path(__FILE__) . '/vendor/autoload.php';
     });
 }
+
+require_once(plugin_dir_path(__FILE__) . '/update-checker/autoload.php');
+$kratos_plugin_update_check = KratosUpdateChecker\Factory::buildUpdateChecker(
+    'https://dl.seatonjiang.com/kratos/info/12.json',
+    __FILE__,
+    'kratos-plugin-aws',
+    24,
+    'kratos-plugin-aws-update'
+);
