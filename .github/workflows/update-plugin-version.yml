@@ -88,6 +88,7 @@ jobs:
           files: dist/${{ env.CURRENT_DATE }}.zip
 
       - name: "上传资源到多吉云存储"
+        if: env.SHOULD_RELEASE == 'true'
         uses: seatonjiang/dogecloud-oss-action@main
         with:
           access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
