@@ -23,7 +23,7 @@ if (!has_action('kratos-plugin-aws')) {
 
 require_once(plugin_dir_path(__FILE__) . '/update-checker/autoload.php');
 $kratos_plugin_update_check = KratosUpdateChecker\Factory::buildUpdateChecker(
-    'https://dl.seatonjiang.com/kratos/info/12.json',
+    'https://dl.seatonjiang.com/kratos/info/plugin-aws.json',
     __FILE__,
     'kratos-plugin-aws',
     24,
