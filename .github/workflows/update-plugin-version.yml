@@ -68,15 +68,14 @@ jobs:
       - name: "整理发布文件"
         if: env.SHOULD_RELEASE == 'true'
         run: |
-          rm -rf dist
-          mkdir -p dist
-          cp kratos-plugin-aws.php dist/
-          cp LICENSE dist/ || true
-          rsync -a vendor/ dist/vendor/ --exclude 'bin/*' --delete
+          mkdir -p dist/kratos-plugin-aws
+          cp kratos-plugin-aws.php dist/kratos-plugin-aws/
+          cp LICENSE dist/kratos-plugin-aws/ || true
+          rsync -a vendor/ dist/kratos-plugin-aws/vendor/ --exclude 'bin/*' --delete
 
       - name: "创建插件安装包"
         if: env.SHOULD_RELEASE == 'true'
-        run: cd dist && zip -rq ../${{ env.CURRENT_DATE }}.zip . -x ".*" "*.zip"
+        run: cd dist && zip -rq ${{ env.CURRENT_DATE }}.zip kratos-plugin-aws -x ".*" "*.zip"
 
       - name: "创建 Release"
         if: env.SHOULD_RELEASE == 'true'
