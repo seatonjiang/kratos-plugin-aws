@@ -550,6 +550,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionNotifications(array $args = [])
  * @method \Aws\NotificationsContacts\NotificationsContactsClient createNotificationsContacts(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionNotificationsContacts(array $args = [])
+ * @method \Aws\NovaAct\NovaActClient createNovaAct(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionNovaAct(array $args = [])
  * @method \Aws\OAM\OAMClient createOAM(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionOAM(array $args = [])
  * @method \Aws\OSIS\OSISClient createOSIS(array $args = [])
@@ -833,7 +835,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.364.0';
+    const VERSION = '3.365.0';
 
     /** @var array Arguments for creating clients */
     private $args;
