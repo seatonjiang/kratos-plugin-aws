@@ -2,7 +2,7 @@ name: "更新插件版本"
 
 on:
   schedule:
-    - cron: "0 0 * * 3"
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
@@ -99,3 +99,13 @@ jobs:
           bucket: ${{ secrets.DOGECLOUD_BUCKET }}
           local_path: dist/kratos-plugin-aws.zip
           remote_path: kratos/plugin
+
+      - name: "删除旧的 Release 和 Actions"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: ophub/delete-releases-workflows@main
+        with:
+          delete_releases: true
+          releases_keep_latest: 1
+          delete_workflows: true
+          workflows_keep_day: 1
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
