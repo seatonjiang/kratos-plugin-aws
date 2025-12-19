@@ -87,15 +87,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: dist/kratos-plugin-aws.zip
 
-      # - name: "上传资源到多吉云存储"
-      #   if: env.SHOULD_RELEASE == 'true'
-      #   uses: seatonjiang/dogecloud-oss-action@main
-      #   with:
-      #     access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
-      #     secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
-      #     bucket: ${{ secrets.DOGECLOUD_BUCKET }}
-      #     local_path: dist/kratos-plugin-aws.zip
-      #     remote_path: kratos/plugin
+      - name: "上传资源到多吉云存储"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: seatonjiang/dogecloud-oss-action@main
+        with:
+          access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
+          secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
+          bucket: ${{ secrets.DOGECLOUD_BUCKET }}
+          local_path: dist/kratos-plugin-aws.zip
+          remote_path: kratos/plugin
 
       - name: "删除旧的 Release 和 Actions"
         if: env.SHOULD_RELEASE == 'true'
@@ -105,4 +105,5 @@ jobs:
           releases_keep_latest: 1
           delete_workflows: true
           workflows_keep_day: 1
+          delete_tags: true
           gh_token: ${{ secrets.GITHUB_TOKEN }}
