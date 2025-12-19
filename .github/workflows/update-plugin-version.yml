@@ -75,7 +75,10 @@ jobs:
 
       - name: "创建插件安装包"
         if: env.SHOULD_RELEASE == 'true'
-        run: cd dist && zip -rq ${{ env.CURRENT_DATE }}.zip kratos-plugin-aws -x ".*" "*.zip"
+        run: |
+          cd dist
+          zip -rq ${{ env.CURRENT_DATE }}.zip kratos-plugin-aws -x ".*" "*.zip"
+          cp ${{ env.CURRENT_DATE }}.zip kratos-plugin-aws.zip
 
       - name: "创建 Release"
         if: env.SHOULD_RELEASE == 'true'
@@ -94,5 +97,5 @@ jobs:
           access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
           secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
           bucket: ${{ secrets.DOGECLOUD_BUCKET }}
-          local_path: dist/${{ env.CURRENT_DATE }}.zip
-          remote_path: kratos/plugin/aws
+          local_path: dist/kratos-plugin-aws.zip
+          remote_path: kratos/plugin
