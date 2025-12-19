@@ -3,7 +3,7 @@
 /**
  * Plugin Name: 对象存储工具包
  * Description: 使用分布式存储服务所需的工具包，提供 CDN 加速以及涉黄、涉恐、涉暴内容自动审核功能，具有高扩展性、低成本、可靠安全等优点。
- * Version: 2025.12.18
+ * Version: 2025.12.19
  * Plugin URI: https://github.com/seatonjiang/kratos-plugin-aws
  * Author: Seaton Jiang
  * Author URI: https://seatonjiang.com
