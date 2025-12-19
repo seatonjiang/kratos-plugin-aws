@@ -77,8 +77,7 @@ jobs:
         if: env.SHOULD_RELEASE == 'true'
         run: |
           cd dist
-          zip -rq ${{ env.CURRENT_DATE }}.zip kratos-plugin-aws -x ".*" "*.zip"
-          cp ${{ env.CURRENT_DATE }}.zip kratos-plugin-aws.zip
+          zip -rq kratos-plugin-aws.zip kratos-plugin-aws -x ".*" "*.zip"
 
       - name: "创建 Release"
         if: env.SHOULD_RELEASE == 'true'
@@ -88,17 +87,17 @@ jobs:
           name: ${{ env.CURRENT_DATE }}
           tag_name: ${{ env.CURRENT_DATE }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          files: dist/${{ env.CURRENT_DATE }}.zip
+          files: dist/kratos-plugin-aws.zip
 
-      - name: "上传资源到多吉云存储"
-        if: env.SHOULD_RELEASE == 'true'
-        uses: seatonjiang/dogecloud-oss-action@main
-        with:
-          access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
-          secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
-          bucket: ${{ secrets.DOGECLOUD_BUCKET }}
-          local_path: dist/kratos-plugin-aws.zip
-          remote_path: kratos/plugin
+      # - name: "上传资源到多吉云存储"
+      #   if: env.SHOULD_RELEASE == 'true'
+      #   uses: seatonjiang/dogecloud-oss-action@main
+      #   with:
+      #     access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
+      #     secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
+      #     bucket: ${{ secrets.DOGECLOUD_BUCKET }}
+      #     local_path: dist/kratos-plugin-aws.zip
+      #     remote_path: kratos/plugin
 
       - name: "删除旧的 Release 和 Actions"
         if: env.SHOULD_RELEASE == 'true'
