@@ -2,8 +2,8 @@
 
 /**
  * Plugin Name: 对象存储工具包
- * Description: 使用分布式存储服务所需的工具包，提供 CDN 加速以及涉黄、涉恐、涉暴内容自动审核功能，具有高扩展性、低成本、可靠安全等优点。
- * Version: 2025.12.19
+ * Description: 使用对象存储服务所需的工具包，对象存储是一种专为海量非结构化数据设计的云存储架构，为客户提供海量、安全、高可靠、低成本的数据存储能力。
+ * Version: 2025.12.18
  * Plugin URI: https://github.com/seatonjiang/kratos-plugin-aws
  * Author: Seaton Jiang
  * Author URI: https://seatonjiang.com
@@ -21,54 +21,13 @@ if (file_exists(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
 
 class Kratos_Update_Plugin
 {
-
-    /**
-     * 插件的 slug
-     *
-     * @var string
-     */
     public $plugin_slug;
-
-    /**
-     * 插件主文件的相对路径
-     * e.g., 'kratos-plugin-aws/kratos-plugin-aws.php'
-     *
-     * @var string
-     */
     public $plugin_basename_file;
-
-    /**
-     * 插件当前版本
-     *
-     * @var string
-     */
     public $version;
-
-    /**
-     * 瞬态缓存 (Transient) 的键
-     *
-     * @var string
-     */
     public $cache_key;
-
-    /**
-     * 是否允许使用缓存
-     *
-     * @var bool
-     */
     public $cache_allowed;
-
-    /**
-     * 远程更新服务器的 URL
-     *
-     * @var string
-     */
     private $update_url;
 
-
-    /**
-     * 构造函数，初始化并挂载 WordPress 钩子
-     */
     public function __construct()
     {
 
