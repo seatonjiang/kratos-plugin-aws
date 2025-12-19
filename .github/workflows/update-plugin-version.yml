@@ -104,8 +104,7 @@ jobs:
           access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
           secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
           type: "url"
-          urls:
-            - "https://dl.seatonjiang.com/kratos/plugin/kratos-plugin-aws.zip"
+          urls: "https://dl.seatonjiang.com/kratos/plugin/kratos-plugin-aws.zip"
 
       - name: "删除旧的 Release 和 Actions"
         if: env.SHOULD_RELEASE == 'true'
