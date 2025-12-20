@@ -32,11 +32,11 @@ class Kratos_Update_Plugin
     {
 
         // 初始化插件的核心信息
-        $this->plugin_slug          = plugin_basename(__DIR__);
+        $this->plugin_slug = plugin_basename(__DIR__);
         $this->plugin_basename_file = plugin_basename(__FILE__);
-        $this->update_url           = 'http://82.156.122.116/theme.json'; // 使用安全的 HTTPS URL
-        $this->cache_key            = 'kratos_aws_custom_upd'; // 使用更具描述性的缓存键
-        $this->cache_allowed        = true; // 启用缓存以提高性能
+        $this->update_url = 'http://82.156.122.116/theme.json'; // 使用安全的 HTTPS URL
+        $this->cache_key = 'kratos_update_plugin_aws'; // 使用更具描述性的缓存键
+        $this->cache_allowed = true; // 启用缓存以提高性能
 
         // 动态获取插件版本号
         if (! function_exists('get_plugin_data')) {
