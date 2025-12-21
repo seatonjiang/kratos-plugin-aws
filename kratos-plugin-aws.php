@@ -20,9 +20,11 @@ if (file_exists(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
 }
 
 if (file_exists(plugin_dir_path(__FILE__) . 'includes/kratos-update-checker.php')) {
-    require_once plugin_dir_path(__FILE__) . 'includes/kratos-update-checker.php';
+    if (!class_exists('Kratos_Update_Checker\\Plugin')) {
+        require_once plugin_dir_path(__FILE__) . 'includes/kratos-update-checker.php';
+    }
 }
 
 add_action('init', function () {
-    new Kratos_Update_Checker\Plugin('http://82.156.122.116/theme.json', 'kratos_update_plugins_aws');
+    $UpdateChecker = new Kratos_Update_Checker\Plugin('http://82.156.122.116/theme.json', 'kratos_update_plugins_aws');
 });
