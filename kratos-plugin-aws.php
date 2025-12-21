@@ -21,31 +21,21 @@ if (file_exists(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
 
 class Kratos_Update_Plugin
 {
-    public $plugin_slug;
-    public $plugin_basename_file;
-    public $version;
-    public $cache_key;
-    public $cache_allowed;
-    private $update_url;
+    public string $plugin_slug;
+    public string $plugin_basename_file;
+    public string $version;
+    public string $transient_key = 'kratos_update_plugin_aws';
+    public string $update_url = 'http://82.156.122.116/theme.json';
+    public bool $cache_allowed = true;
 
     public function __construct()
     {
-
-        // 初始化插件的核心信息
         $this->plugin_slug = plugin_basename(__DIR__);
         $this->plugin_basename_file = plugin_basename(__FILE__);
-        $this->update_url = 'http://82.156.122.116/theme.json'; // 使用安全的 HTTPS URL
-        $this->cache_key = 'kratos_update_plugin_aws'; // 使用更具描述性的缓存键
-        $this->cache_allowed = true; // 启用缓存以提高性能
 
-        // 动态获取插件版本号
-        if (! function_exists('get_plugin_data')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
         $plugin_data = get_plugin_data(__FILE__);
         $this->version = $plugin_data['Version'];
 
-        // 挂载到 WordPress 核心钩子
         add_filter('plugins_api', array($this, 'info'), 20, 3);
         add_filter('pre_set_site_transient_update_plugins', array($this, 'update'));
         add_action('upgrader_process_complete', array($this, 'purge'), 10, 2);
@@ -53,17 +43,15 @@ class Kratos_Update_Plugin
     }
 
     /**
-     * 从远程服务器请求更新信息
+     * 远程获取更新信息
      *
      * @return object|false
      */
     public function request()
     {
+        $remote = get_transient($this->transient_key);
 
-        // 尝试从缓存中获取反序列化后的对象
-        $remote = get_transient($this->cache_key);
-
-        // 如果用户在后台点击了“检查更新”，则强制刷新
+        // 如果用户在后台点击了检查更新，则强制刷新
         if (isset($_GET['force-check']) && 1 === (int) $_GET['force-check']) {
             $remote = false;
         }
@@ -95,15 +83,14 @@ class Kratos_Update_Plugin
             $remote = json_decode(wp_remote_retrieve_body($response));
 
             // 将解码后的对象序列化后存入缓存，有效期为 12 小时
-            set_transient($this->cache_key, $remote, HOUR_IN_SECONDS * 12);
+            set_transient($this->transient_key, $remote, HOUR_IN_SECONDS * 12);
         }
 
         return $remote;
     }
 
-
     /**
-     * 自定义插件信息弹窗的内容
+     * 自定义插件信息内容
      *
      * @param object|false $res
      * @param string       $action
@@ -112,7 +99,6 @@ class Kratos_Update_Plugin
      */
     function info($res, $action, $args)
     {
-
         // 仅在请求插件信息时执行
         if ('plugin_information' !== $action) {
             return $res;
@@ -175,18 +161,14 @@ class Kratos_Update_Plugin
      */
     public function update($transient)
     {
-
         // 确保 $transient 是一个有效的对象
         if (! is_object($transient)) {
             $transient = new stdClass();
         }
 
-        // 确保 response 和 no_update 属性存在且为数组，以防止在某些情况下（如首次检查）出现 "Undefined property" 错误
+        // 确保 response 属性存在且为数组
         if (! property_exists($transient, 'response') || ! is_array($transient->response)) {
             $transient->response = [];
-        }
-        if (! property_exists($transient, 'no_update') || ! is_array($transient->no_update)) {
-            $transient->no_update = [];
         }
 
         $remote = $this->request();
@@ -203,33 +185,16 @@ class Kratos_Update_Plugin
             $res->slug         = $this->plugin_slug;
             $res->plugin       = $this->plugin_basename_file;
             $res->new_version  = $remote->version;
-            $res->tested       = isset($remote->tested) ? $remote->tested : '';
-            $res->package      = isset($remote->download_url) ? $remote->download_url : '';
-            $res->url          = isset($remote->homepage) ? $remote->homepage : '';
-            $res->icons        = isset($remote->icons) ? (array) $remote->icons : [];
-            $res->banners      = isset($remote->banners) ? (array) $remote->banners : [];
+            $res->tested       = $remote->tested ?? '';
+            $res->package      = $remote->download_url ?? '';
+            $res->url          = $remote->homepage ?? '';
+            $res->icons        = (array) ($remote->icons ?? []);
+            $res->banners      = (array) ($remote->banners ?? []);
             $res->banners_rtl  = array();
             $res->requires_php = $remote->requires_php;
 
             // 将更新信息注入到 transient
             $transient->response[$res->plugin] = $res;
-        } else {
-            // 没有可用更新，将插件信息添加到 no_update 数组
-            $res                 = new stdClass();
-            $res->id             = $this->plugin_basename_file;
-            $res->slug           = $this->plugin_slug;
-            $res->plugin         = $this->plugin_basename_file;
-            $res->new_version    = $this->version;
-            $res->url            = '';
-            $res->package        = '';
-            $res->icons          = [];
-            $res->banners        = [];
-            $res->banners_rtl    = [];
-            $res->tested         = '';
-            $res->requires_php   = '';
-            $res->compatibility  = new stdClass();
-
-            $transient->no_update[$res->plugin] = $res;
         }
 
         return $transient;
@@ -243,8 +208,6 @@ class Kratos_Update_Plugin
      */
     public function purge($upgrader, $options)
     {
-
-        // 仅在本插件更新成功后才清除缓存
         if (
             $this->cache_allowed
             && 'update' === $options['action']
@@ -252,13 +215,12 @@ class Kratos_Update_Plugin
             && isset($options['plugins'])
             && in_array($this->plugin_basename_file, $options['plugins'], true)
         ) {
-            // 清除本插件的更新缓存
-            delete_transient($this->cache_key);
+            delete_transient($this->transient_key);
         }
     }
 
     /**
-     * 在插件信息行（版本、作者之后）添加“检查更新”的链接
+     * 插件列表页添加检查更新按钮
      *
      * @param array  $links
      * @param string $file
@@ -274,6 +236,7 @@ class Kratos_Update_Plugin
             );
             $links[] = $update_link;
         }
+
         return $links;
     }
 }
