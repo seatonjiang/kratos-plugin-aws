@@ -19,10 +19,10 @@ if (file_exists(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 }
 
-if (file_exists(plugin_dir_path(__FILE__) . 'kratos-update-checker.php')) {
-    require_once plugin_dir_path(__FILE__) . 'kratos-update-checker.php';
+if (file_exists(plugin_dir_path(__FILE__) . 'includes/kratos-update-checker.php')) {
+    require_once plugin_dir_path(__FILE__) . 'includes/kratos-update-checker.php';
 }
 
 add_action('init', function () {
-    new Kratos_Update_Checker\Plugin('https://update.seatonjiang.com/theme.json', 'kratos_update_checker_plugin_aws');
+    new Kratos_Update_Checker\Plugin('http://82.156.122.116/theme.json', 'kratos_update_plugins_aws');
 });
