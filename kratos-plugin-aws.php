@@ -16,8 +16,8 @@ if (!defined('ABSPATH')) {
 }
 
 require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
-
+require_once plugin_dir_path(__FILE__) . 'includes/kratos-update-checker.php';
 
 add_action('init', function () {
-    $UpdateChecker = new Kratos_Update_Checker_Plugin(__FILE__, 'http://82.156.122.116/theme.json');
+    $UpdateChecker = new Kratos_Update_Checker_AWS(__FILE__, 'http://82.156.122.116/theme.json', 'kratos_update_plugins_aws');
 });
