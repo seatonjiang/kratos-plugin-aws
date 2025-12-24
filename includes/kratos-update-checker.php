@@ -13,6 +13,18 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
         public bool $cache_allowed = true;
 
         /**
+         * 用于在当前请求生命周期内缓存远程响应。
+         * @var mixed
+         */
+        private $remote_response;
+
+        /**
+         * 标记远程响应是否已被缓存。
+         * @var bool
+         */
+        private bool $response_cached = false;
+
+        /**
          * 构造函数。
          *
          * @param string $plugin_file 插件主文件的绝对路径 (例如 __FILE__ )。
@@ -55,38 +67,57 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
          */
         public function request()
         {
+            // 如果在当前请求中已有缓存，则直接返回
+            if ($this->response_cached) {
+                return $this->remote_response;
+            }
+
             $remote = get_transient($this->transient_key);
+            $force_check = isset($_GET['force-check']) && 1 === (int) $_GET['force-check'];
 
-            // 强制检查更新
-            if (isset($_GET['force-check']) && 1 === (int) $_GET['force-check']) {
-                $remote = false;
+            // 如果不是强制检查，并且有有效的缓存，则直接使用缓存
+            if (!$force_check && false !== $remote && $this->cache_allowed) {
+                $this->remote_response = $remote;
+                $this->response_cached = true;
+                return $this->remote_response;
             }
 
-            if (false === $remote || !$this->cache_allowed) {
-                $response = wp_remote_get(
-                    $this->update_url,
-                    [
-                        'timeout' => 10,
-                        'headers' => [
-                            'Accept' => 'application/json',
-                        ],
-                    ]
-                );
-
-                if (
-                    is_wp_error($response)
-                    || 200 !== wp_remote_retrieve_response_code($response)
-                    || empty(wp_remote_retrieve_body($response))
-                ) {
-                    return false;
-                }
-
-                $remote = json_decode(wp_remote_retrieve_body($response));
-
-                set_transient($this->transient_key, $remote, HOUR_IN_SECONDS * 12);
+            // 如果是强制检查，删除旧的瞬态缓存
+            if ($force_check) {
+                delete_transient($this->transient_key);
             }
 
-            return $remote;
+            // 执行远程请求
+            $response = wp_remote_get(
+                $this->update_url,
+                [
+                    'timeout' => 10,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                    ],
+                ]
+            );
+
+            if (
+                is_wp_error($response)
+                || 200 !== wp_remote_retrieve_response_code($response)
+                || empty(wp_remote_retrieve_body($response))
+            ) {
+                $this->remote_response = false;
+                $this->response_cached = true;
+                return false;
+            }
+
+            $remote = json_decode(wp_remote_retrieve_body($response));
+
+            // 请求成功，设置瞬态缓存
+            set_transient($this->transient_key, $remote, HOUR_IN_SECONDS * 12);
+
+            // 缓存响应结果以备在当前请求中复用
+            $this->remote_response = $remote;
+            $this->response_cached = true;
+
+            return $this->remote_response;
         }
 
         /**
@@ -148,7 +179,7 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
         public function update($transient)
         {
             if (!is_object($transient)) {
-                $transient = new \stdClass();
+                $transient = new stdClass();
             }
 
             if (!property_exists($transient, 'response') || !is_array($transient->response)) {
