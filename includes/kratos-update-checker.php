@@ -52,7 +52,7 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
         /**
          * 添加 WordPress 钩子。
          */
-        public function add_hooks(): void
+        public function add_hooks()
         {
             add_filter('plugins_api', [$this, 'info'], 20, 3);
             add_filter('pre_set_site_transient_update_plugins', [$this, 'update']);
@@ -218,7 +218,7 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
          * @param \WP_Upgrader $upgrader
          * @param array $options
          */
-        public function purge($upgrader, $options): void
+        public function purge($upgrader, $options)
         {
             if (
                 $this->cache_allowed

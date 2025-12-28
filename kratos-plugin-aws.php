@@ -22,8 +22,8 @@ add_action('init', function () {
     if (is_admin()) {
         new Kratos_Update_Checker_AWS(
             __FILE__,
-            'http://82.156.122.116/theme.json',
-            'kratos_update_plugins_aws'
+            'https://dl.seatonjiang.com/kratos/info/kratos-plugin-aws.json',
+            'kratos_plugin_aws'
         );
     }
 });
