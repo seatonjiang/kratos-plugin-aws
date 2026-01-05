@@ -68,11 +68,11 @@ jobs:
       - name: "整理发布文件"
         if: env.SHOULD_RELEASE == 'true'
         run: |
-          mkdir -p dist/kratos-plugin-aws
-          cp .github/assets/wechat-reward.png dist/kratos-plugin-aws/.github/assets/wechat-reward.png
-          cp kratos-plugin-aws.php dist/kratos-plugin-aws/
-          cp includes/kratos-update-checker.php dist/kratos-plugin-aws/includes/kratos-update-checker.php
-          cp LICENSE dist/kratos-plugin-aws/ || true
+          # 一键创建多级目录并拷贝文件
+          mkdir -p dist/kratos-plugin-aws/{.github/assets,includes}
+          cp .github/assets/wechat-reward.png dist/kratos-plugin-aws/.github/assets/
+          cp kratos-plugin-aws.php includes/kratos-update-checker.php dist/kratos-plugin-aws/
+          cp LICENSE dist/kratos-plugin-aws/
           rsync -a vendor/ dist/kratos-plugin-aws/vendor/ --exclude 'bin/*' --delete
 
       - name: "创建插件安装包"
