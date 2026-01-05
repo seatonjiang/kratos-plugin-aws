@@ -68,7 +68,6 @@ jobs:
       - name: "整理发布文件"
         if: env.SHOULD_RELEASE == 'true'
         run: |
-          # 一键创建多级目录并拷贝文件
           mkdir -p dist/kratos-plugin-aws/{.github/assets,includes}
           cp .github/assets/wechat-reward.png dist/kratos-plugin-aws/.github/assets/
           cp kratos-plugin-aws.php includes/kratos-update-checker.php dist/kratos-plugin-aws/
