@@ -250,8 +250,8 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
                 $links[] = $update_link;
 
                 $sponsor_link = sprintf(
-                    '<a href="#" class="kratos-sponsor-link">%s</a>',
-                    __('立即赞助', 'kratos')
+                    '<a href="#" class="kratos-sponsor-link"><span class="dashicons dashicons-star-filled" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%s</a>',
+                    __('赞助', 'kratos')
                 );
                 $links[] = $sponsor_link;
             }
@@ -276,18 +276,6 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
                     <img src="<?php echo esc_url(plugins_url('/.github/assets/wechat-reward.png', $this->plugin_file)); ?>" alt="微信赞赏码">
                 </div>
             </div>
-            <script type="text/javascript">
-                jQuery(document).ready(function($) {
-                    $('.kratos-sponsor-link').click(function(e) {
-                        e.preventDefault();
-                        $('#kratos-sponsor-modal').fadeIn();
-                    });
-                    $('#kratos-sponsor-modal .close').click(function() {
-                        $('#kratos-sponsor-modal').fadeOut();
-                    });
-
-                });
-            </script>
 <?php
         }
     }
