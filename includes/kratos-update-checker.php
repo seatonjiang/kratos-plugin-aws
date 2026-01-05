@@ -58,6 +58,7 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
             add_filter('pre_set_site_transient_update_plugins', [$this, 'update']);
             add_action('upgrader_process_complete', [$this, 'purge'], 10, 2);
             add_filter('plugin_row_meta', [$this, 'add_details_link'], 10, 2);
+            add_action('admin_footer', [$this, 'sponsor_modal_script']);
         }
 
         /**
@@ -247,9 +248,47 @@ if (!class_exists('Kratos_Update_Checker_AWS')) {
                     __('检查更新', 'kratos')
                 );
                 $links[] = $update_link;
+
+                $sponsor_link = sprintf(
+                    '<a href="#" class="kratos-sponsor-link">%s</a>',
+                    __('立即赞助', 'kratos')
+                );
+                $links[] = $sponsor_link;
             }
 
             return $links;
+        }
+
+        /**
+         * 输出赞助模态框的脚本和样式。
+         */
+        public function sponsor_modal_script()
+        {
+            global $pagenow;
+            if ('plugins.php' !== $pagenow) {
+                return;
+            }
+?>
+            <div id="kratos-sponsor-modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p style="margin-bottom: 10px; font-weight: bold; font-size: 16px;"><?php esc_html_e('微信赞赏码', 'kratos'); ?></p>
+                    <img src="<?php echo esc_url(plugins_url('/.github/assets/wechat-reward.png', $this->plugin_file)); ?>" alt="微信赞赏码">
+                </div>
+            </div>
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('.kratos-sponsor-link').click(function(e) {
+                        e.preventDefault();
+                        $('#kratos-sponsor-modal').fadeIn();
+                    });
+                    $('#kratos-sponsor-modal .close').click(function() {
+                        $('#kratos-sponsor-modal').fadeOut();
+                    });
+
+                });
+            </script>
+<?php
         }
     }
 }

@@ -69,7 +69,9 @@ jobs:
         if: env.SHOULD_RELEASE == 'true'
         run: |
           mkdir -p dist/kratos-plugin-aws
+          cp .github/assets/wechat-reward.png dist/kratos-plugin-aws/.github/assets/wechat-reward.png
           cp kratos-plugin-aws.php dist/kratos-plugin-aws/
+          cp includes/kratos-update-checker.php dist/kratos-plugin-aws/includes/kratos-update-checker.php
           cp LICENSE dist/kratos-plugin-aws/ || true
           rsync -a vendor/ dist/kratos-plugin-aws/vendor/ --exclude 'bin/*' --delete
 
