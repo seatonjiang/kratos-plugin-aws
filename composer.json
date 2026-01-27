@@ -1,0 +1,12 @@
+{
+  "name": "seatonjiang/kratos-plugin-aws",
+  "description": "Accelerating and storing static resource files",
+  "keywords": [
+    "kratos",
+    "plugin",
+    "aws"
+  ],
+  "require": {
+    "aws/aws-sdk-php": "*"
+  }
+}
