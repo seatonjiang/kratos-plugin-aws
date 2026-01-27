@@ -1,0 +1,119 @@
+name: "更新插件版本"
+
+on:
+  schedule:
+    - cron: "0 1 * * 3"
+  workflow_dispatch:
+
+jobs:
+  update-plugin-version:
+    name: "更新插件版本"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "拉取代码"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: "配置环境"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          tools: composer
+
+      - name: "获取日期"
+        run: echo "CURRENT_DATE=$(TZ=Asia/Shanghai date +'%Y.%m.%d')" >> $GITHUB_ENV
+
+      - name: "获取更新前依赖版本"
+        run: echo "AWS_SDK_VERSION_BEFORE=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
+
+      - name: "更新依赖"
+        run: |
+          composer install
+          composer update
+          sed -i "s/Version: .*/Version: ${{ env.CURRENT_DATE }}/" kratos-plugin-aws.php
+
+      - name: "获取更新后依赖版本"
+        run: echo "AWS_SDK_VERSION_AFTER=$(composer show aws/aws-sdk-php | grep versions | awk '{print $NF}')" >> $GITHUB_ENV
+
+      - name: "判断是否需要发版"
+        id: check_change
+        run: |
+          if [ "$AWS_SDK_VERSION_BEFORE" = "$AWS_SDK_VERSION_AFTER" ]; then
+            echo "SHOULD_RELEASE=false" >> $GITHUB_ENV
+            echo "版本未变化，跳过发布。"
+          else
+            echo "SHOULD_RELEASE=true" >> $GITHUB_ENV
+            echo "检测到版本变化：$AWS_SDK_VERSION_BEFORE -> $AWS_SDK_VERSION_AFTER"
+          fi
+
+      - name: "提交并推送变更"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: actions-js/push@v1.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          author_name: "github-actions[bot]"
+          coauthor_email: "hi@seatonjiang.com"
+          coauthor_name: "Seaton Jiang"
+          message: "feat: 更新插件依赖版本"
+
+      - name: "生成变更日志"
+        if: env.SHOULD_RELEASE == 'true'
+        run: |
+          echo "### 变更日志" >> ${{ github.workspace }}-CHANGELOG.txt
+          echo "- 🚀 升级依赖包 \`aws/aws-sdk-php\` 的版本到 \`${{ env.AWS_SDK_VERSION_AFTER }}\`" >> ${{ github.workspace }}-CHANGELOG.txt
+          echo "- ✨ 升级插件版本到 \`${{ env.CURRENT_DATE }}\`" >> ${{ github.workspace }}-CHANGELOG.txt
+
+      - name: "整理发布文件"
+        if: env.SHOULD_RELEASE == 'true'
+        run: |
+          mkdir -p dist/kratos-plugin-aws/{.github/assets,includes}
+          cp .github/assets/wechat-reward.png dist/kratos-plugin-aws/.github/assets/
+          cp kratos-plugin-aws.php includes/kratos-update-checker.php dist/kratos-plugin-aws/
+          cp LICENSE dist/kratos-plugin-aws/
+          rsync -a vendor/ dist/kratos-plugin-aws/vendor/ --exclude 'bin/*' --delete
+
+      - name: "创建插件安装包"
+        if: env.SHOULD_RELEASE == 'true'
+        run: cd dist && zip -rq kratos-plugin-aws.zip kratos-plugin-aws -x ".*" "*.zip"
+
+      - name: "创建 Release"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          name: ${{ env.CURRENT_DATE }}
+          tag_name: ${{ env.CURRENT_DATE }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: dist/kratos-plugin-aws.zip
+
+      - name: "上传资源到多吉云存储"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: seatonjiang/dogecloud-oss-action@main
+        with:
+          access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
+          secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
+          bucket: ${{ secrets.DOGECLOUD_BUCKET }}
+          local_path: dist/kratos-plugin-aws.zip
+          remote_path: kratos/plugin
+
+      - name: "刷新多吉云 CDN 缓存"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: seatonjiang/dogecloud-cdn-action@main
+        with:
+          access_key: ${{ secrets.DOGECLOUD_ACCESS_KEY }}
+          secret_key: ${{ secrets.DOGECLOUD_SECRET_KEY }}
+          type: "url"
+          urls: "https://dl.seatonjiang.com/kratos/plugin/kratos-plugin-aws.zip"
+
+      - name: "删除旧的 Release 和 Actions"
+        if: env.SHOULD_RELEASE == 'true'
+        uses: ophub/delete-releases-workflows@main
+        with:
+          delete_releases: true
+          releases_keep_latest: 1
+          delete_workflows: true
+          workflows_keep_day: 1
+          delete_tags: true
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
