@@ -160,8 +160,6 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionCloudWatch(array $args = [])
  * @method \Aws\CloudWatchEvents\CloudWatchEventsClient createCloudWatchEvents(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionCloudWatchEvents(array $args = [])
- * @method \Aws\CloudWatchEvidently\CloudWatchEvidentlyClient createCloudWatchEvidently(array $args = [])
- * @method \Aws\MultiRegionClient createMultiRegionCloudWatchEvidently(array $args = [])
  * @method \Aws\CloudWatchLogs\CloudWatchLogsClient createCloudWatchLogs(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionCloudWatchLogs(array $args = [])
  * @method \Aws\CloudWatchRUM\CloudWatchRUMClient createCloudWatchRUM(array $args = [])
@@ -378,8 +376,6 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionInternetMonitor(array $args = [])
  * @method \Aws\Invoicing\InvoicingClient createInvoicing(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInvoicing(array $args = [])
- * @method \Aws\IoTAnalytics\IoTAnalyticsClient createIoTAnalytics(array $args = [])
- * @method \Aws\MultiRegionClient createMultiRegionIoTAnalytics(array $args = [])
  * @method \Aws\IoTDeviceAdvisor\IoTDeviceAdvisorClient createIoTDeviceAdvisor(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionIoTDeviceAdvisor(array $args = [])
  * @method \Aws\IoTEvents\IoTEventsClient createIoTEvents(array $args = [])
@@ -835,7 +831,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.369.31';
+    const VERSION = '3.369.36';
 
     /** @var array Arguments for creating clients */
     private $args;
