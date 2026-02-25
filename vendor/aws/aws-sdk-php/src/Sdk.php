@@ -300,6 +300,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionElasticLoadBalancingV2(array $args = [])
  * @method \Aws\ElasticsearchService\ElasticsearchServiceClient createElasticsearchService(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionElasticsearchService(array $args = [])
+ * @method \Aws\ElementalInference\ElementalInferenceClient createElementalInference(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionElementalInference(array $args = [])
  * @method \Aws\Emr\EmrClient createEmr(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionEmr(array $args = [])
  * @method \Aws\EntityResolution\EntityResolutionClient createEntityResolution(array $args = [])
@@ -730,6 +732,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionSfn(array $args = [])
  * @method \Aws\Shield\ShieldClient createShield(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionShield(array $args = [])
+ * @method \Aws\SignerData\SignerDataClient createSignerData(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionSignerData(array $args = [])
  * @method \Aws\Signin\SigninClient createSignin(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSignin(array $args = [])
  * @method \Aws\SimSpaceWeaver\SimSpaceWeaverClient createSimSpaceWeaver(array $args = [])
@@ -831,7 +835,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.369.36';
+    const VERSION = '3.371.0';
 
     /** @var array Arguments for creating clients */
     private $args;
