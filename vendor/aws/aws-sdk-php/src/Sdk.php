@@ -252,6 +252,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionDeadline(array $args = [])
  * @method \Aws\Detective\DetectiveClient createDetective(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionDetective(array $args = [])
+ * @method \Aws\DevOpsAgent\DevOpsAgentClient createDevOpsAgent(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionDevOpsAgent(array $args = [])
  * @method \Aws\DevOpsGuru\DevOpsGuruClient createDevOpsGuru(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionDevOpsGuru(array $args = [])
  * @method \Aws\DeviceFarm\DeviceFarmClient createDeviceFarm(array $args = [])
@@ -712,6 +714,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionSchemas(array $args = [])
  * @method \Aws\SecretsManager\SecretsManagerClient createSecretsManager(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSecretsManager(array $args = [])
+ * @method \Aws\SecurityAgent\SecurityAgentClient createSecurityAgent(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionSecurityAgent(array $args = [])
  * @method \Aws\SecurityHub\SecurityHubClient createSecurityHub(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSecurityHub(array $args = [])
  * @method \Aws\SecurityIR\SecurityIRClient createSecurityIR(array $args = [])
@@ -766,6 +770,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionSupport(array $args = [])
  * @method \Aws\SupportApp\SupportAppClient createSupportApp(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSupportApp(array $args = [])
+ * @method \Aws\Sustainability\SustainabilityClient createSustainability(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionSustainability(array $args = [])
  * @method \Aws\Swf\SwfClient createSwf(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSwf(array $args = [])
  * @method \Aws\Synthetics\SyntheticsClient createSynthetics(array $args = [])
@@ -790,6 +796,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionTranslate(array $args = [])
  * @method \Aws\TrustedAdvisor\TrustedAdvisorClient createTrustedAdvisor(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionTrustedAdvisor(array $args = [])
+ * @method \Aws\Uxc\UxcClient createUxc(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionUxc(array $args = [])
  * @method \Aws\VPCLattice\VPCLatticeClient createVPCLattice(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionVPCLattice(array $args = [])
  * @method \Aws\VerifiedPermissions\VerifiedPermissionsClient createVerifiedPermissions(array $args = [])
@@ -839,7 +847,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.373.9';
+    const VERSION = '3.376.0';
 
     /** @var array Arguments for creating clients */
     private $args;
