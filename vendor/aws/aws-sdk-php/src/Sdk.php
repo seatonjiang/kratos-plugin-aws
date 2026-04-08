@@ -674,6 +674,8 @@ namespace Aws;
  * @method \Aws\S3\S3MultiRegionClient createMultiRegionS3(array $args = [])
  * @method \Aws\S3Control\S3ControlClient createS3Control(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionS3Control(array $args = [])
+ * @method \Aws\S3Files\S3FilesClient createS3Files(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionS3Files(array $args = [])
  * @method \Aws\S3Outposts\S3OutpostsClient createS3Outposts(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionS3Outposts(array $args = [])
  * @method \Aws\S3Tables\S3TablesClient createS3Tables(array $args = [])
@@ -847,7 +849,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.376.0';
+    const VERSION = '3.377.0';
 
     /** @var array Arguments for creating clients */
     private $args;
