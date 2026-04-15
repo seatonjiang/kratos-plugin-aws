@@ -378,6 +378,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionInspector2(array $args = [])
  * @method \Aws\InspectorScan\InspectorScanClient createInspectorScan(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInspectorScan(array $args = [])
+ * @method \Aws\Interconnect\InterconnectClient createInterconnect(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionInterconnect(array $args = [])
  * @method \Aws\InternetMonitor\InternetMonitorClient createInternetMonitor(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionInternetMonitor(array $args = [])
  * @method \Aws\Invoicing\InvoicingClient createInvoicing(array $args = [])
@@ -494,6 +496,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionMarketplaceCommerceAnalytics(array $args = [])
  * @method \Aws\MarketplaceDeployment\MarketplaceDeploymentClient createMarketplaceDeployment(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionMarketplaceDeployment(array $args = [])
+ * @method \Aws\MarketplaceDiscovery\MarketplaceDiscoveryClient createMarketplaceDiscovery(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionMarketplaceDiscovery(array $args = [])
  * @method \Aws\MarketplaceEntitlementService\MarketplaceEntitlementServiceClient createMarketplaceEntitlementService(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionMarketplaceEntitlementService(array $args = [])
  * @method \Aws\MarketplaceMetering\MarketplaceMeteringClient createMarketplaceMetering(array $args = [])
@@ -849,7 +853,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.377.0';
+    const VERSION = '3.379.0';
 
     /** @var array Arguments for creating clients */
     private $args;

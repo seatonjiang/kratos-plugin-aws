@@ -59,17 +59,17 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.377.0",
-            "version_normalized": "3.377.0.0",
+            "version": "3.379.0",
+            "version_normalized": "3.379.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "573c569d20710a902446688a0439b53fef256e3a"
+                "reference": "a50c3cc2c59f5ebeb56cbe170e6f144034b252b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/573c569d20710a902446688a0439b53fef256e3a",
-                "reference": "573c569d20710a902446688a0439b53fef256e3a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a50c3cc2c59f5ebeb56cbe170e6f144034b252b6",
+                "reference": "a50c3cc2c59f5ebeb56cbe170e6f144034b252b6",
                 "shasum": ""
             },
             "require": {
@@ -109,7 +109,7 @@
                 "ext-pcntl": "To use client-side monitoring",
                 "ext-sockets": "To use client-side monitoring"
             },
-            "time": "2026-04-07T18:14:36+00:00",
+            "time": "2026-04-13T18:11:10+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -153,7 +153,7 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.377.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.0"
             },
             "install-path": "../aws/aws-sdk-php"
         },
@@ -922,17 +922,17 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.33.0",
-            "version_normalized": "1.33.0.0",
+            "version": "v1.35.0",
+            "version_normalized": "1.35.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638"
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/a3cc8b044a6ea513310cbd48ef7333b384945638",
-                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/141046a8f9477948ff284fa65be2095baafb94f2",
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
                 "shasum": ""
             },
             "require": {
@@ -944,7 +944,7 @@
             "suggest": {
                 "ext-ctype": "For best performance"
             },
-            "time": "2024-09-09T11:45:10+00:00",
+            "time": "2026-04-10T16:19:22+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -984,7 +984,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.35.0"
             },
             "funding": [
                 {
@@ -1008,17 +1008,17 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.33.0",
-            "version_normalized": "1.33.0.0",
+            "version": "v1.35.0",
+            "version_normalized": "1.35.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493"
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6d857f4d76bd4b343eac26d6b539585d2bc56493",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6a21eb99c6973357967f6ce3708cd55a6bec6315",
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
                 "shasum": ""
             },
             "require": {
@@ -1031,7 +1031,7 @@
             "suggest": {
                 "ext-mbstring": "For best performance"
             },
-            "time": "2024-12-23T08:48:59+00:00",
+            "time": "2026-04-10T17:25:58+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -1072,7 +1072,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.35.0"
             },
             "funding": [
                 {
