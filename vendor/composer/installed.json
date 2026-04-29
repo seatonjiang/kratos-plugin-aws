@@ -59,17 +59,17 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.379.4",
-            "version_normalized": "3.379.4.0",
+            "version": "3.379.8",
+            "version_normalized": "3.379.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "606d812d3e9289147e2c801d51b916c45c92de39"
+                "reference": "856ddf3d241c29132fe1eb946e112351ab043542"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/606d812d3e9289147e2c801d51b916c45c92de39",
-                "reference": "606d812d3e9289147e2c801d51b916c45c92de39",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/856ddf3d241c29132fe1eb946e112351ab043542",
+                "reference": "856ddf3d241c29132fe1eb946e112351ab043542",
                 "shasum": ""
             },
             "require": {
@@ -109,7 +109,7 @@
                 "ext-pcntl": "To use client-side monitoring",
                 "ext-sockets": "To use client-side monitoring"
             },
-            "time": "2026-04-21T20:01:34+00:00",
+            "time": "2026-04-27T19:13:21+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -153,7 +153,7 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.8"
             },
             "install-path": "../aws/aws-sdk-php"
         },
@@ -922,8 +922,8 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.36.0",
-            "version_normalized": "1.36.0.0",
+            "version": "v1.37.0",
+            "version_normalized": "1.37.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -984,7 +984,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.36.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -1008,8 +1008,8 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.36.0",
-            "version_normalized": "1.36.0.0",
+            "version": "v1.37.0",
+            "version_normalized": "1.37.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -1072,7 +1072,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.36.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.37.0"
             },
             "funding": [
                 {
